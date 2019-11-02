@@ -17,7 +17,8 @@ public class Tester : MonoBehaviour
         //r.width = 1f;
         //s = r;
 
-        c = new Circle();
+        c = new Circle(Vector2.zero, 3f);
+
 
     }
 
