@@ -5,18 +5,19 @@ using UnityEngine;
 public class Tester : MonoBehaviour
 {
 
-    public RectDrawing r1;
-    public RectDrawing r2;
-
-    public CircleDrawing c1;
-    public CircleDrawing c2;
-
-
+    public Shape s;
+    public Circle c;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
-        
+        //Rectangle r = new Rectangle();
+        //r.center = new Vector2(0, 0);
+        //r.height = 2f;
+        //r.width = 1f;
+        //s = r;
+
+        c = new Circle();
 
     }
 
@@ -24,7 +25,9 @@ public class Tester : MonoBehaviour
     void Update()
     {
 
-         print(Collision.IsColliding(c1.circle, r1.rect));
+        //DrawHelper.DrawShape(s);
+        DrawHelper.DrawShape(c);
+        //print(Collision.IsColliding(, ));
 
     }
 }

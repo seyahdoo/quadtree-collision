@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collision : MonoBehaviour
+public static class Collision
 {
     
     public static bool IsColliding (Shape shape, Shape other)
