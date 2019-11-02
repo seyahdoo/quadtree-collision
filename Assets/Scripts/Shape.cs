@@ -6,4 +6,10 @@ using UnityEngine;
 public class Shape
 {
     public Vector2 center;
+
+    public void OnCollisionEnter(Shape other)
+    {
+        //Debug.Log("Collided!");
+    }
+
 }

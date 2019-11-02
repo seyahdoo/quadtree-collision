@@ -5,30 +5,34 @@ using UnityEngine;
 public class Tester : MonoBehaviour
 {
 
-    public Shape s;
-    public Circle c;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Rectangle r = new Rectangle();
-        //r.center = new Vector2(0, 0);
-        //r.height = 2f;
-        //r.width = 1f;
-        //s = r;
+    public Quadtree q;
+    public HashSet<Shape> shapes = new HashSet<Shape>();
+    public Camera cam;
 
-        c = new Circle(Vector2.zero, 3f);
-
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
 
-        //DrawHelper.DrawShape(s);
-        DrawHelper.DrawShape(c);
-        //print(Collision.IsColliding(, ));
+        if (Input.anyKey)
+        {
+            Ray r = cam.ScreenPointToRay(Input.mousePosition);
+            Vector3 p = r.GetPoint(10);
+            Circle c = new Circle(p, Random.Range(1f, 4f));
+            shapes.Add(c);
+        }
+
+        q = new Quadtree(new Rectangle(Vector2.zero, 100, 100), 4);
+        foreach (var s in shapes)
+        {
+            q.Insert(s);
+            DrawHelper.DrawShape(s);
+        }
+        q.Draw();
+
+        foreach (var s in shapes)
+        {
+            q.Search(s);
+        }
+
 
     }
 }
