@@ -10,6 +10,8 @@ public class UIController : MonoBehaviour
     public Dropdown detectionMethodDropdown;
     public Toggle drawShapesEnabledToggle;
     public Toggle drawTreeEnabledToggle;
+    public Toggle removeDeadEnabledToggle;
+    public Toggle removeExcessEnabledToggle;
 
     public void OnShapeCountChanged()
     {
@@ -31,6 +33,13 @@ public class UIController : MonoBehaviour
         Settings.debugDrawTree = drawTreeEnabledToggle.isOn;
     }
 
-
+    public void OnRemoveDeadEnabledChanged()
+    {
+        Settings.removeDead = removeDeadEnabledToggle.isOn;
+    }
+    public void OnRemoveExcessEnabledChanged()
+    {
+        Settings.removeExcess = removeExcessEnabledToggle.isOn;
+    }
 
 }

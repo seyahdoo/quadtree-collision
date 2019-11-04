@@ -16,5 +16,7 @@ public static class Settings
 
     public static bool debugDrawShapes = true;
     public static bool debugDrawTree = true;
+    public static bool removeDead = true;
+    public static bool removeExcess = true;
 
 }

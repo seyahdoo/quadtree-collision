@@ -25,20 +25,37 @@ public static class ShapeSystem
         }
     }
 
+    public static void RemoveRandomShape(int count)
+    {
+
+        List<Shape> list = new List<Shape>(shapes);
+
+        for (int i = 0; i < count; i++)
+        {
+            shapes.Remove(list[list.Count-i-1]);
+        }
+
+    }
+
     public static void Update()
     {
         int removedCount = shapes.RemoveWhere((Shape s) => 
         {
            return (
-            s.health <= 0) || 
+            (s.health <= 0) && Settings.removeDead) || 
             Mathf.Abs(s.center.x) > 100f || 
             Mathf.Abs(s.center.y) > 100f;
             }
         );
 
-        for (int i = 0; i < removedCount; i++)
+        for (int i = 0; i < Settings.shapeCount - shapes.Count; i++)
         {
             SpawnRandomShape();
+        }
+
+        if (Settings.removeExcess)
+        {
+            RemoveRandomShape(shapes.Count - Settings.shapeCount);
         }
 
         foreach (var s in shapes)
@@ -54,9 +71,6 @@ public static class ShapeSystem
         if (Settings.debugDrawShapes) DrawHelper.DrawShape(s1, Color.red);
 
         s1.health--;
-
     }
-
-
 
 }
