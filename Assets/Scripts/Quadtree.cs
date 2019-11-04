@@ -72,8 +72,7 @@ public class Quadtree
         {
             if(s != shapes[i] && Collision.IsColliding(s, shapes[i]))
             {
-                s.OnCollisionEnter(shapes[i]);
-                shapes[i].OnCollisionEnter(s);
+                ShapeSystem.OnCollisionEnter(s, shapes[i]);
             }
         }
         if (subdivided)
@@ -87,7 +86,12 @@ public class Quadtree
 
     public void Clear()
     {
-        this.shapesCounter = 0;
+        shapesCounter = 0;
+        for (int i = 0; i < shapes.Length; i++)
+        {
+            shapes[i] = null;
+        }
+
         if (subdivided)
         {
             tl.Clear();
