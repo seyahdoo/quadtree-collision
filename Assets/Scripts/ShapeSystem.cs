@@ -32,7 +32,7 @@ public static class ShapeSystem
 
         for (int i = 0; i < count; i++)
         {
-            shapes.Remove(list[list.Count-i-1]);
+            shapes.Remove(list[Random.Range(0, list.Count)]);
         }
 
     }
