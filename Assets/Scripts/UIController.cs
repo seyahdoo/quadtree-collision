@@ -12,6 +12,12 @@ public class UIController : MonoBehaviour
     public Toggle drawTreeEnabledToggle;
     public Toggle removeDeadEnabledToggle;
     public Toggle removeExcessEnabledToggle;
+    public Text frameTime;
+
+    private void Update()
+    {
+        frameTime.text = Time.deltaTime.ToString();
+    }
 
     public void OnShapeCountChanged()
     {
