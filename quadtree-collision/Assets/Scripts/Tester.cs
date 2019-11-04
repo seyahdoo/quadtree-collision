@@ -8,7 +8,7 @@ public class Tester : MonoBehaviour
 
     void Update()
     {
-        if (Input.anyKey)
+        if (Input.GetMouseButton(0))
         {
             Ray r = cam.ScreenPointToRay(Input.mousePosition);
             Vector3 p = r.GetPoint(10);
@@ -16,6 +16,7 @@ public class Tester : MonoBehaviour
         }
 
         ShapeSystem.Update();
+        CollisionDetectionSystem.DetectCollisions();
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -52,12 +53,6 @@ public class Tester : MonoBehaviour
             Settings.debugDrawTree = !Settings.debugDrawTree;
         }
 
-        CollisionDetectionSystem.DetectCollisions();
-
-        //cam.transform.position = new Vector3(q.boundry.center.x, q.boundry.center.y, -10f);
-        //cam.orthographicSize = Mathf.Clamp(q.boundry.height, 1f, 100f);
     }
-
-    
 
 }
