@@ -6,13 +6,13 @@ using UnityEngine;
 public class Rectangle : Shape
 {
 
-    public Rectangle(Vector2 center, float height, float width)
+    public Rectangle(Vector2 center, float width, float height)
     {
         this.center = center;
-        this.height = height;
         this.width = width;
+        this.height = height;
     }
 
-    public float height;
     public float width;
+    public float height;
 }

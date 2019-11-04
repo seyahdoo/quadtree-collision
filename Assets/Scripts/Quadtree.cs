@@ -55,28 +55,27 @@ public class Quadtree
 
     public void Subdivide()
     {
-        tl = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.height / 4, boundry.center.y - boundry.width / 4), boundry.height / 2, boundry.width / 2), capacity);
-        tr = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.height / 4, boundry.center.y + boundry.width / 4), boundry.height / 2, boundry.width / 2), capacity);
-        bl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.height / 4, boundry.center.y - boundry.width / 4), boundry.height / 2, boundry.width / 2), capacity);
-        br = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.height / 4, boundry.center.y + boundry.width / 4), boundry.height / 2, boundry.width / 2), capacity);
+        tr = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+        br = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.width / 4, boundry.center.y - boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+        tl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.width / 4, boundry.center.y + boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+        bl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.width / 4, boundry.center.y - boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
         subdivided = true;
     }
 
     public void Search(Shape s)
     {
-        if (!Collision.IsColliding(boundry, s))
+        if (!Collision.IsColliding(s, boundry))
         {
             return;
         }
-
         for (int i = 0; i < shapesCounter; i++)
         {
-            if(Collision.IsColliding(s, shapes[i]))
+            if(s != shapes[i] && Collision.IsColliding(s, shapes[i]))
             {
                 s.OnCollisionEnter(shapes[i]);
+                shapes[i].OnCollisionEnter(s);
             }
         }
-
         if (subdivided)
         {
             tl.Search(s);
@@ -84,12 +83,87 @@ public class Quadtree
             bl.Search(s);
             br.Search(s);
         }
-
     }
 
+    public void Clear()
+    {
+        this.shapesCounter = 0;
+        if (subdivided)
+        {
+            tl.Clear();
+            tr.Clear();
+            bl.Clear();
+            br.Clear();
+        }
+    }
+
+    public void Resize(float centerX, float centerY, float width, float height)
+    {
+        this.boundry.center.x = centerX;
+        this.boundry.center.y = centerY;
+        this.boundry.width = width;
+        this.boundry.height = height;
+
+        if (subdivided)
+        {
+            tr.Resize(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4, boundry.width / 2, boundry.height / 2);
+            br.Resize(boundry.center.x + boundry.width / 4, boundry.center.y - boundry.height / 4, boundry.width / 2, boundry.height / 2); tr.Resize(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4, boundry.width / 2, boundry.height / 2);
+            tl.Resize(boundry.center.x - boundry.width / 4, boundry.center.y + boundry.height / 4, boundry.width / 2, boundry.height / 2);
+            bl.Resize(boundry.center.x - boundry.width / 4, boundry.center.y - boundry.height / 4, boundry.width / 2, boundry.height / 2);
+        }
+    }
+
+    public void ClearEmptySubdivisions()
+    {
+        if(subdivided == true)
+        {
+            tl.ClearEmptySubdivisions();
+            tr.ClearEmptySubdivisions();
+            bl.ClearEmptySubdivisions();
+            br.ClearEmptySubdivisions();
+
+            if ( this.shapesCounter +
+                tl.shapesCounter +
+                tr.shapesCounter +
+                bl.shapesCounter +
+                br.shapesCounter <= 4)
+            {
+                for (int i = 0; i < tl.shapesCounter; i++)
+                {
+                    shapes[shapesCounter] = tl.shapes[i];
+                    shapesCounter++;
+                }
+                tl = null;
+
+                for (int i = 0; i < bl.shapesCounter; i++)
+                {
+                    shapes[shapesCounter] = bl.shapes[i];
+                    shapesCounter++;
+                }
+                bl = null;
+
+                for (int i = 0; i < tr.shapesCounter; i++)
+                {
+                    shapes[shapesCounter] = tr.shapes[i];
+                    shapesCounter++;
+                }
+                tr = null;
+
+                for (int i = 0; i < br.shapesCounter; i++)
+                {
+                    shapes[shapesCounter] = br.shapes[i];
+                    shapesCounter++;
+                }
+                tl = null;
+
+                subdivided = false;
+            }
+        }
+    }
+    
     public void Draw()
     {
-        DrawHelper.DrawShape(boundry);
+        DrawHelper.DrawShape(boundry, Color.white);
         if (subdivided)
         {
             tl.Draw();
