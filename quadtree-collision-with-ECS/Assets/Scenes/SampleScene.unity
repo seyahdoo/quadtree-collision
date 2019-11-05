@@ -149,6 +149,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4471c835a04a145bf840c8fde1d6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  squareMaterial: {fileID: 2100000, guid: db4d711fd1bf9c24ba98b36b490ce0a0, type: 2}
+  circleMaterial: {fileID: 2100000, guid: d45ee05b4f8423a44a2ca71885008eb4, type: 2}
 --- !u!4 &155516788
 Transform:
   m_ObjectHideFlags: 0

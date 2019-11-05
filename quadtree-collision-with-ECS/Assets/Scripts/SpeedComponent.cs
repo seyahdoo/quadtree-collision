@@ -4,6 +4,11 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct RectangleComponent: IComponentData
+public struct SpeedComponent : IComponentData
 {
+    float2 Value;
 }
+
+
+
+
