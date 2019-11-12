@@ -6,6 +6,7 @@ public static class ShapeSystem
 {
 
     public static HashSet<Shape> shapes = new HashSet<Shape>();
+    private static List<Shape> tempShapeList = new List<Shape>();
 
     public static void SpawnShape(Shape s)
     {
@@ -27,14 +28,13 @@ public static class ShapeSystem
 
     public static void RemoveRandomShape(int count)
     {
-
-        List<Shape> list = new List<Shape>(shapes);
+        tempShapeList.Clear();
+        tempShapeList.AddRange(shapes);
 
         for (int i = 0; i < count; i++)
         {
-            shapes.Remove(list[Random.Range(0, list.Count)]);
+            shapes.Remove(tempShapeList[Random.Range(0, tempShapeList.Count)]);
         }
-
     }
 
     public static void Update()
