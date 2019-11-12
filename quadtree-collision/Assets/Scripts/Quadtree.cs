@@ -12,6 +12,7 @@ public class Quadtree
     public int shapesCounter = 0;
 
     public bool subdivided = false;
+    private bool subdivisionCached = false;
     public Quadtree tl;
     public Quadtree tr;
     public Quadtree bl;
@@ -55,11 +56,15 @@ public class Quadtree
 
     public void Subdivide()
     {
-        tr = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
-        br = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.width / 4, boundry.center.y - boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
-        tl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.width / 4, boundry.center.y + boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
-        bl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.width / 4, boundry.center.y - boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+        if (!subdivisionCached)
+        {
+            tr = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+            br = new Quadtree(new Rectangle(new Vector2(boundry.center.x + boundry.width / 4, boundry.center.y - boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+            tl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.width / 4, boundry.center.y + boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+            bl = new Quadtree(new Rectangle(new Vector2(boundry.center.x - boundry.width / 4, boundry.center.y - boundry.height / 4), boundry.width / 2, boundry.height / 2), capacity);
+        }
         subdivided = true;
+        subdivisionCached = true;
     }
 
     public void Search(Shape s)
@@ -111,7 +116,7 @@ public class Quadtree
         if (subdivided)
         {
             tr.Resize(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4, boundry.width / 2, boundry.height / 2);
-            br.Resize(boundry.center.x + boundry.width / 4, boundry.center.y - boundry.height / 4, boundry.width / 2, boundry.height / 2); tr.Resize(boundry.center.x + boundry.width / 4, boundry.center.y + boundry.height / 4, boundry.width / 2, boundry.height / 2);
+            br.Resize(boundry.center.x + boundry.width / 4, boundry.center.y - boundry.height / 4, boundry.width / 2, boundry.height / 2);
             tl.Resize(boundry.center.x - boundry.width / 4, boundry.center.y + boundry.height / 4, boundry.width / 2, boundry.height / 2);
             bl.Resize(boundry.center.x - boundry.width / 4, boundry.center.y - boundry.height / 4, boundry.width / 2, boundry.height / 2);
         }
@@ -137,34 +142,42 @@ public class Quadtree
                     shapes[shapesCounter] = tl.shapes[i];
                     shapesCounter++;
                 }
-                tl = null;
-
                 for (int i = 0; i < bl.shapesCounter; i++)
                 {
                     shapes[shapesCounter] = bl.shapes[i];
                     shapesCounter++;
                 }
-                bl = null;
-
                 for (int i = 0; i < tr.shapesCounter; i++)
                 {
                     shapes[shapesCounter] = tr.shapes[i];
                     shapesCounter++;
                 }
-                tr = null;
-
                 for (int i = 0; i < br.shapesCounter; i++)
                 {
                     shapes[shapesCounter] = br.shapes[i];
                     shapesCounter++;
                 }
-                tl = null;
-
                 subdivided = false;
             }
         }
     }
     
+    public void ClearMemory()
+    {
+        if (!subdivided && subdivisionCached)
+        {
+            tr.ClearMemory();
+            tl.ClearMemory();
+            br.ClearMemory();
+            bl.ClearMemory();
+            tr = null;
+            tl = null;
+            br = null;
+            bl = null;
+            subdivisionCached = false;
+        }
+    }
+
     public void Draw()
     {
         DrawHelper.DrawShape(boundry, Color.white);
